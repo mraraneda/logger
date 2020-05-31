@@ -22,7 +22,7 @@ type LogrusFileConfiguration struct {
 	MaxSize    int // MB
 	Compress   bool
 	MaxAge     int // Days
-	MaxBackups int
+	MaxBackups int // Maximum number of files
 }
 
 type logrusLogEntry struct {
