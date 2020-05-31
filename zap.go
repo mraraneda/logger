@@ -19,6 +19,10 @@ type ZapFileConfiguration struct {
 	JSONFormat bool
 	Level      string
 	Path       string
+	MaxSize    int // MB
+	Compress   bool
+	MaxAge     int // Days
+	MaxBackups int
 }
 
 type zapLogger struct {
@@ -37,10 +41,11 @@ func newZapLogger(config Configuration) (Logger, error) {
 	if fileConfig.Enable {
 		level := getZapLevel(fileConfig.Level)
 		writer := zapcore.AddSync(&lumberjack.Logger{
-			Filename: fileConfig.Path,
-			MaxSize:  100,
-			Compress: true,
-			MaxAge:   28,
+			Filename:   fileConfig.Path,
+			MaxSize:    fileConfig.MaxSize,
+			Compress:   fileConfig.Compress,
+			MaxAge:     fileConfig.MaxAge,
+			MaxBackups: fileConfig.MaxBackups,
 		})
 		core := zapcore.NewCore(getEncoder(fileConfig.JSONFormat), writer, level)
 		cores = append(cores, core)

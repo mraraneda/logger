@@ -19,6 +19,10 @@ type LogrusFileConfiguration struct {
 	JSONFormat bool
 	Level      string
 	Path       string
+	MaxSize    int // MB
+	Compress   bool
+	MaxAge     int // Days
+	MaxBackups int
 }
 
 type logrusLogEntry struct {
@@ -44,7 +48,7 @@ func newLogrusLogger(config Configuration) (Logger, error) {
 	log := &logrusLogger{
 		logger: lLogger,
 	}
-	log.setOutput(consoleConfig.Enable, fileConfig.Enable, fileConfig.JSONFormat, fileConfig.Path)
+	log.setOutput(consoleConfig.Enable, fileConfig)
 	return log, nil
 }
 
@@ -82,21 +86,22 @@ func getFormatter(isJSON bool) logrus.Formatter {
 	}
 }
 
-func (l *logrusLogger) setOutput(enableConsole, enableFile, isFileJSON bool, filepath string) {
+func (l *logrusLogger) setOutput(enableConsole bool, fileConfig LogrusFileConfiguration) {
 
 	fileHandler := &lumberjack.Logger{
-		Filename: filepath,
-		MaxSize:  100,
-		Compress: true,
-		MaxAge:   28,
+		Filename:   fileConfig.Path,
+		MaxSize:    fileConfig.MaxSize,
+		Compress:   fileConfig.Compress,
+		MaxAge:     fileConfig.MaxAge,
+		MaxBackups: fileConfig.MaxBackups,
 	}
 
-	if enableConsole && enableFile {
+	if enableConsole && fileConfig.Enable {
 		l.logger.SetOutput(io.MultiWriter(l.logger.Out, fileHandler))
 	} else {
-		if enableFile {
+		if fileConfig.Enable {
 			l.logger.SetOutput(fileHandler)
-			l.logger.SetFormatter(getFormatter(isFileJSON))
+			l.logger.SetFormatter(getFormatter(fileConfig.JSONFormat))
 		}
 	}
 
