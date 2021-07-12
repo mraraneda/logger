@@ -5,7 +5,7 @@ import "errors"
 // A global variable so that log functions can be directly accessed
 var log Logger
 
-// Fields Type to pass when we want to call WithFields for structured logging
+// Fields type to pass when we want to call WithFields for structured logging
 type Fields map[string]interface{}
 
 // Available logger level
