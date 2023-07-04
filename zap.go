@@ -30,7 +30,7 @@ type zapLogger struct {
 }
 
 func newZapLogger(config Configuration) (Logger, error) {
-	cores := []zapcore.Core{}
+	var cores []zapcore.Core
 	consoleConfig, fileConfig := getZapConfig(config)
 	if consoleConfig.Enable {
 		level := getZapLevel(consoleConfig.Level)
