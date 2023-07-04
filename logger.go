@@ -10,15 +10,15 @@ type Fields map[string]interface{}
 
 // Available logger level
 const (
-	//Debug has verbose message
+	// Debug has verbose message
 	Debug = "debug"
-	//Info is default log level
+	// Info is default log level
 	Info = "info"
-	//Warn is for logging messages about possible issues
+	// Warn is for logging messages about possible issues
 	Warn = "warn"
-	//Error is for logging errors
+	// Error is for logging errors
 	Error = "error"
-	//Fatal is for logging fatal messages. The sytem shutsdown after logging the message.
+	// Fatal is for logging fatal messages. The sytem shutsdown after logging the message.
 	Fatal = "fatal"
 )
 
